@@ -1,9 +1,11 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export const getEncouragement = async (mood: string): Promise<string> => {
   try {
+    // Initialize the client inside the function.
+    // This prevents the application from crashing on startup if the API key is not immediately available.
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+
     const prompt = `
       You are an Egyptian "Hypeman" (Motabelaty - مُطبلاتي) who is extremely supportive, funny, and energetic.
       A user is telling you they feel: "${mood}".
@@ -27,6 +29,7 @@ export const getEncouragement = async (mood: string): Promise<string> => {
     return response.text || "يا نهار ابيض! انت زي الفل يا ريس 🥁👏";
   } catch (error) {
     console.error("Gemini API Error:", error);
+    // Return a supportive fallback message if the API fails
     return "معلش الشبكة مهنجة بس انت لسه نجم النجوم! 🥁🥁🥁";
   }
 };
